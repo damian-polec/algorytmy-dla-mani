@@ -311,3 +311,188 @@ function sumPrimes(num) {
 }
 
 sumPrimes(10);
+
+// Intermediate Algorithm Scripting: Smallest Common MultiplePassed
+// Find the smallest common multiple of the provided parameters that can be evenly divided by both, as well as by all sequential numbers in the range between these parameters.
+
+// The range will be an array of two numbers that will not necessarily be in numerical order.
+
+// For example, if given 1 and 3, find the smallest common multiple of both 1 and 3 that is also evenly divisible by all numbers between 1 and 3. The answer here would be 6.
+
+function smallestCommons(arr) {
+  const array = arr.sort((a,b) => a-b)
+  let max = array[1];
+  let min = array[0];
+  let scm = max;
+
+  for (let i = max - 1; i >= min; i--) {
+    if (scm % i) {
+      scm += max;
+      i = max;
+    }
+  }
+  return scm;
+}
+
+
+smallestCommons([1,5]);
+
+// Intermediate Algorithm Scripting: Drop itPassed
+// Given the array arr, iterate through and remove each element starting from the first element (the 0 index) until the function func returns true when the iterated element is passed through it.
+
+// Then return the rest of the array once the condition is satisfied, otherwise, arr should be returned as an empty array.
+
+function dropElements(arr, func) {
+  const array = [...arr];
+  while (!func(array[0])) {
+    array.splice(0,1);
+  }
+  return array;
+}
+
+dropElements([1, 2, 3, 4], function(n) {return n >= 3;});
+
+// Intermediate Algorithm Scripting: SteamrollerPassed
+// Flatten a nested array. You must account for varying levels of nesting.
+
+function steamrollArray(arr) {
+  let array = [].concat(...arr);
+  return array.some(Array.isArray) ? steamrollArray(array) : array;
+}
+steamrollArray([1, [2], [3, [[4]]]]);
+
+// Intermediate Algorithm Scripting: Binary AgentsPassed
+// Return an English translated sentence of the passed binary string.
+
+// The binary string will be space separated.
+
+function binaryAgent(str) {
+  return str.split(' ').map(code => {
+    const charCode = parseInt(code, 2);
+    return String.fromCharCode(charCode);
+  }).join('');
+}
+
+// Intermediate Algorithm Scripting: Everything Be TruePassed
+// Check if the predicate (second argument) is truthy on all elements of a collection (first argument).
+
+// In other words, you are given an array collection of objects. The predicate pre will be an object property and you need to return true if its value is truthy. Otherwise, return false.
+
+// In JavaScript, truthy values are values that translate to true when evaluated in a Boolean context.
+
+// Remember, you can access object properties through either dot notation or [] notation.
+
+function truthCheck(collection, pre) {
+  let isTruthy = true;
+  for(let i = 0; i < collection.length; i++){
+    if(!collection[i][pre]) {
+      isTruthy = false;
+    }
+  }
+  return isTruthy;
+}
+
+truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex");
+
+// Intermediate Algorithm Scripting: Arguments OptionalPassed
+// Create a function that sums two arguments together. If only one argument is provided, then return a function that expects one argument and returns the sum.
+
+// For example, addTogether(2, 3) should return 5, and addTogether(2) should return a function.
+
+// Calling this returned function with a single argument will then return the sum:
+
+// var sumTwoAnd = addTogether(2);
+
+// sumTwoAnd(3) returns 5.
+
+// If either argument isn't a valid number, return undefined.
+
+function addTogether() {
+  const args = [...arguments];
+  function sumAll(arr) {
+    return arr.reduce((total, num) => {
+      return total+=num;
+    })
+  }
+  if(args.some(el =>typeof el !== 'number')) {
+    return undefined;
+  }
+  if(args.length > 1) {
+    return sumAll(args)
+  }
+  return function() {
+    const newArgs = [...arguments].concat(args)
+    if(newArgs.some(el =>typeof el !== 'number')) {
+      return undefined;
+    }
+    return sumAll(newArgs);
+  }
+}
+
+addTogether(2)([3]);
+
+// Intermediate Algorithm Scripting: Make a PersonPassed
+// Fill in the object constructor with the following methods below:
+
+// getFirstName()
+// getLastName()
+// getFullName()
+// setFirstName(first)
+// setLastName(last)
+// setFullName(firstAndLast)
+// Run the tests to see the expected output for each method. The methods that take an argument must accept only one argument and it has to be a string. These methods must be the only available means of interacting with the object.
+
+var Person = function(firstAndLast) {
+  // Only change code below this line
+  // Complete the method below and implement the others similarly
+ let fullName = firstAndLast;
+
+  this.getFirstName = function() {
+    return fullName.split(" ")[0];
+  };
+
+  this.getLastName = function() {
+    return fullName.split(" ")[1];
+  };
+
+  this.getFullName = function() {
+    return fullName;
+  };
+
+  this.setFirstName = function(name) {
+    fullName = name + " " + fullName.split(" ")[1];
+  };
+
+  this.setLastName = function(name) {
+    fullName = fullName.split(" ")[0] + " " + name;
+  };
+
+  this.setFullName = function(name) {
+    fullName = name;
+  };
+};
+
+var bob = new Person('Bob Ross');
+bob.getFullName();
+
+// Intermediate Algorithm Scripting: Map the DebrisPassed
+// Return a new array that transforms the elements' average altitude into their orbital periods (in seconds).
+
+// The array will contain objects in the format {name: 'name', avgAlt: avgAlt}.
+
+// You can read about orbital periods on Wikipedia.
+
+// The values should be rounded to the nearest whole number. The body being orbited is Earth.
+
+// The radius of the earth is 6367.4447 kilometers, and the GM value of earth is 398600.4418 km3s-2.
+
+function orbitalPeriod(arr) {
+  var GM = 398600.4418;
+  var earthRadius = 6367.4447;
+  return arr.map(object => {
+    const T = Math.round(2 * Math.PI * Math.sqrt((Math.pow(earthRadius + object.avgAlt, 3)/ GM)));
+    return {name: object.name, orbitalPeriod: T}
+  });
+}
+
+orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
